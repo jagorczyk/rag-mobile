@@ -1,18 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Image, KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, Text, View, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getMessages, getPreview, sendMessage } from '@/api';
 import { useTheme } from '@/ThemeContext';
-import { Button, Field, Header, Loading, Screen } from '@/ui';
+import { Button, Field, Header, Loading, ModalScreen, Screen } from '@/ui';
 import type { Message, Source } from '@/types';
 
 function SourcePreview({ source, onClose }: { source: Source; onClose: () => void }) {
   const { colors } = useTheme();
   const [content, setContent] = useState<{ kind: string; value: string } | null>(source.base64 ? { kind: 'image', value: `data:image/${source.fileName.toLowerCase().endsWith('.png') ? 'png' : 'jpeg'};base64,${source.base64}` } : null);
   useEffect(() => { if (!content) getPreview(source.path).then(result => setContent({ kind: result.kind, value: result.content })).catch(() => setContent({ kind: 'other', value: 'Nie udało się otworzyć źródła.' })); }, [source.path, content]);
-  return <Modal visible animationType="slide" presentationStyle="fullScreen" onRequestClose={onClose}><Screen><Header title={source.fileName} action={<Pressable onPress={onClose} accessibilityLabel="Zamknij źródło"><Ionicons name="close" size={28} color={colors.ink} /></Pressable>} /><ScrollView contentContainerStyle={{ padding: 16, flexGrow: 1, justifyContent: content ? 'flex-start' : 'center' }}>{!content ? <ActivityIndicator color={colors.accent} size="large" /> : content.kind === 'image' ? <Image source={{ uri: content.value }} resizeMode="contain" style={{ width: '100%', height: 420, backgroundColor: '#111' }} /> : <Text style={{ color: colors.ink, fontSize: 15, lineHeight: 24 }}>{content.value}</Text>}</ScrollView></Screen></Modal>;
+  return <Modal visible animationType="slide" presentationStyle="fullScreen" onRequestClose={onClose}><SafeAreaProvider><ModalScreen><Header title={source.fileName} action={<Pressable onPress={onClose} accessibilityLabel="Zamknij źródło"><Ionicons name="close" size={28} color={colors.ink} /></Pressable>} /><ScrollView contentContainerStyle={{ padding: 16, flexGrow: 1, justifyContent: content ? 'flex-start' : 'center' }}>{!content ? <ActivityIndicator color={colors.accent} size="large" /> : content.kind === 'image' ? <Image source={{ uri: content.value }} resizeMode="contain" style={{ width: '100%', height: 420, backgroundColor: '#111' }} /> : <Text style={{ color: colors.ink, fontSize: 15, lineHeight: 24 }}>{content.value}</Text>}</ScrollView></ModalScreen></SafeAreaProvider></Modal>;
 }
 
 function SourceChip({ source, onPress }: { source: Source; onPress: () => void }) {
