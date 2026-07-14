@@ -1,0 +1,8 @@
+export type Folder = { id: string; name: string; createdAt?: string; updatedAt?: string };
+export type FileItem = { id: string; path: string; name: string; type: string; url?: string; extractedText?: string };
+export type Mention = { id: string; filePath: string; label: string; confidence: number; status: string; visualCues?: string; entityId?: string | null; entityDisplayName?: string | null; bbox?: number[] | null };
+export type Photo = { path: string; fileName: string; imageBase64: string; fileType: string };
+export type Person = { id: string; displayName: string; type: string; photos?: Photo[] };
+export type Chat = { id: string; title: string; updatedAt?: string };
+export type Source = { path: string; fileName: string; score: number; base64?: string; type: string };
+export type Message = { id: string; role: 'user' | 'assistant'; content: string; sources?: Source[]; uncertain?: boolean };

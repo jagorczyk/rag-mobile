@@ -1,0 +1,9 @@
+import { useState } from 'react';
+import { Alert, FlatList, Pressable, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { createChat, getChats } from '@/api';
+import { useTheme } from '@/ThemeContext';
+import { Header, Loading, Screen, styles } from '@/ui';
+export default function Chats(){const {colors}=useTheme();const qc=useQueryClient();const chats=useQuery({queryKey:['chats'],queryFn:getChats});const add=useMutation({mutationFn:createChat,onSuccess:r=>{qc.invalidateQueries({queryKey:['chats']});router.push({pathname:'/chat/[id]',params:{id:r.id}})}});return <Screen><Header title="Rozmowy" action={<Pressable onPress={()=>add.mutate()} accessibilityLabel="Nowa rozmowa"><Ionicons name="add-circle-outline" size={29} color={colors.accent}/></Pressable>}/><View style={styles.content}>{chats.isLoading?<Loading/>:<FlatList data={chats.data} keyExtractor={x=>x.id} contentContainerStyle={{paddingBottom:20}} ListEmptyComponent={<Text style={{color:colors.muted,textAlign:'center',padding:30}}>Brak rozmów. Utwórz pierwszą.</Text>} renderItem={({item})=><Pressable onPress={()=>router.push({pathname:'/chat/[id]',params:{id:item.id}})} style={({pressed})=>[styles.card,{backgroundColor:colors.raised,borderColor:colors.border,flexDirection:'row',alignItems:'center',opacity:pressed?.65:1}]}><Ionicons name="chatbubble-ellipses-outline" size={24} color={colors.accent}/><View style={{marginLeft:12,flex:1}}><Text style={{color:colors.ink,fontWeight:'700'}}>{item.title||'Nowa rozmowa'}</Text><Text style={{color:colors.muted,fontSize:12,marginTop:3}}>{item.updatedAt?new Date(item.updatedAt).toLocaleString('pl-PL'):''}</Text></View><Ionicons name="chevron-forward" size={19} color={colors.muted}/></Pressable>}/>}</View></Screen>}

@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "RAG",
+    "slug": "rag-mobile",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "rag",
+    "userInterfaceStyle": "automatic",
+    "plugins": [
+      [
+        "expo-router",
+        {
+          "origin": false
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "RAG potrzebuje dostępu do zdjęć, aby dodać je do folderu."
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "RAG potrzebuje aparatu, aby wykonać zdjęcie do folderu."
+        }
+      ],
+      "expo-asset",
+      "expo-font"
+    ],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "pl.rag.mobile",
+      "infoPlist": {
+        "NSCameraUsageDescription": "RAG potrzebuje aparatu, aby wykonać zdjęcie do folderu.",
+        "NSPhotoLibraryUsageDescription": "RAG potrzebuje dostępu do zdjęć, aby dodać je do folderu."
+      }
+    }
+  }
+}
