@@ -1,7 +1,7 @@
 import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from './ThemeContext';
-export function Screen({children}:{children:React.ReactNode}){const {colors}=useTheme();return <SafeAreaView edges={['top','left','right']} style={[styles.screen,{backgroundColor:colors.surface}]}>{children}</SafeAreaView>}
+export function Screen({children}:{children:React.ReactNode}){const {colors}=useTheme();return <SafeAreaView edges={['top','bottom','left','right']} style={[styles.screen,{backgroundColor:colors.surface}]}>{children}</SafeAreaView>}
 export function Header({title,action}:{title:string;action?:React.ReactNode}){const {colors}=useTheme();return <View style={[styles.header,{borderBottomColor:colors.border}]}><Text style={[styles.title,{color:colors.ink}]}>{title}</Text>{action}</View>}
 export function Button({label,onPress,secondary=false,disabled=false}:{label:string;onPress:()=>void;secondary?:boolean;disabled?:boolean}){const {colors}=useTheme();return <Pressable disabled={disabled} onPress={onPress} style={({pressed})=>[styles.button,{backgroundColor:secondary?colors.raised:colors.accent,borderColor:secondary?colors.border:colors.accent,opacity:disabled?.45:pressed?.7:1}]}><Text style={{color:secondary?colors.ink:'#fff',fontWeight:'700'}}>{label}</Text></Pressable>}
 export function Field(props:React.ComponentProps<typeof TextInput>){const {colors}=useTheme();return <TextInput {...props} placeholderTextColor={colors.muted} style={[styles.field,{backgroundColor:colors.raised,borderColor:colors.border,color:colors.ink},props.style]}/>}
