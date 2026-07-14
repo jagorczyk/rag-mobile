@@ -28,11 +28,10 @@ export const renameFile = (oldPath: string, newName: string) => request<void>('/
 export const moveFiles = (filePaths: string[], targetFolderId: string) => request<void>('/api/data/files/move', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({filePaths,targetFolderId})});
 export const deleteFiles = (filePaths: string[]) => request<void>('/api/data/files/delete', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({filePaths})});
 
-export async function uploadFile(folderId: string, asset: {uri:string; name:string; mimeType?:string}, entityTag?: string) {
+export async function uploadFile(folderId: string, asset: {uri:string; name:string; mimeType?:string}) {
   const body = new FormData();
   body.append('file', {uri: asset.uri, name: asset.name, type: asset.mimeType || 'application/octet-stream'} as unknown as Blob);
-  const tag = entityTag?.trim() ? `?entityTag=${encodeURIComponent(entityTag.trim())}` : '';
-  return request<{path:string; fileName:string; image:boolean}>(`/api/folders/${folderId}/upload${tag}`, {method:'POST', body});
+  return request<{path:string; fileName:string; image:boolean}>(`/api/folders/${folderId}/upload`, {method:'POST', body});
 }
 
 export const getPeople = () => request<Person[]>('/api/knowledge/entities');
