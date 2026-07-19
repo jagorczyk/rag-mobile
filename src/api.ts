@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
-import type { FileItem, Folder, Message, Mention, Person } from './types';
+import type { EntityAppearance, FileItem, Folder, Message, Mention, Person } from './types';
 
 const URL_KEY = 'rag.api.url';
 const expoHost = Constants.expoConfig?.hostUri?.split(':')[0];
@@ -42,6 +42,8 @@ export async function uploadFile(folderId: string, asset: {uri:string; name:stri
 }
 
 export const getPeople = () => request<Person[]>('/api/knowledge/entities');
+export const getEntityAppearances = (id: string) => request<EntityAppearance[]>(`/api/knowledge/entities/${id}/appearances`);
+export const deletePerson = (id: string) => request<void>(`/api/knowledge/entities/${id}`, {method:'DELETE'});
 export const getMentions = (path: string) => request<Mention[]>(`/api/knowledge/mentions/by-file?path=${encodeURIComponent(path)}`);
 export const detectFaces = (path: string) => request<Mention[]>(`/api/knowledge/mentions/by-file/detect-faces?path=${encodeURIComponent(path)}`, {method:'POST'});
 export const renamePerson = (id: string, newName: string) => request<void>(`/api/knowledge/entities/${id}/rename?newName=${encodeURIComponent(newName)}`, {method:'PUT'});

@@ -5,7 +5,7 @@
     "version": "0.1.0",
     "orientation": "portrait",
     "scheme": "rag",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "light",
     "plugins": [
       [
         "expo-router",
